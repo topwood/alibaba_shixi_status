@@ -5,15 +5,15 @@ var request= require("request");
 var $ = require("cheerio");
 var nodeMailer = require('nodemailer');
 
-var user = 'yourQQ@qq.com', //发送邮箱
-    pass = 'yourAuthCode'; //不是密码，授权码来源详见：http://service.mail.qq.com/cgi-bin/help?subtype=1&&id=28&&no=1001256
-
+var from = 'yourQQ@qq.com', //发送邮箱
+    pass = 'yourAuthCode', //不是密码，授权码来源详见：http://service.mail.qq.com/cgi-bin/help?subtype=1&&id=28&&no=1001256
+    to = 'yourTargetQQ@qq.com';
 var transporter = nodeMailer.createTransport({
     host: 'smtp.qq.com',
     secureConnection: true,
     port: 465,
     auth: {
-        user: user,
+        user: from,
         pass: pass
     }
 });
@@ -31,6 +31,7 @@ var options = {
 function callback(error, response, body) {
     if (!error && response.statusCode == 200) {
         var status =  $(body).find('.strong-new').slice(1).text();
+        console.log("你当前的状态为：", status);
         if(status != "面试中"){
             sendEmail("您的状态变为 " + status);
         }
@@ -39,8 +40,8 @@ function callback(error, response, body) {
 
 function sendEmail(html){
     transporter.sendMail({
-        from: 'yourQQ@qq.com', //发送邮箱
-        to: 'youTargetQQ@qq.com', //目标邮箱
+        from: from, //发送邮箱
+        to: to, //目标邮箱
         subject: '阿里实习状态已改变！',
         html: html
     });
