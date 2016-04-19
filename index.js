@@ -27,13 +27,15 @@ var options = {
         'cookie': ''
     }
 };
+var inter;
 
 function callback(error, response, body) {
     if (!error && response.statusCode == 200) {
         var status =  $(body).find('.strong-new').slice(1).text();
-        console.log("你当前的状态为：", status);
+        console.log("当前状态: ",status,' '+new Date().toLocaleString());
         if(status != "面试中"){
             sendEmail("您的状态变为 " + status);
+            clearInterval(inter);
         }
     }
 }
@@ -47,7 +49,9 @@ function sendEmail(html){
     });
 }
 
-setInterval(function(){
+request(options, callback);
+
+inter = setInterval(function(){
     request(options, callback);
-},5000);
+},1000 * 30);
 
