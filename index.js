@@ -31,7 +31,7 @@ var inter;
 
 function callback(error, response, body) {
     if (!error && response.statusCode == 200) {
-        var status =  $(body).find('.strong-new').slice(1).text();
+        var status =  $(body).find('.strong-new').slice(1,2).text();
         console.log("当前状态: ",status,' '+new Date().toLocaleString());
         if(status != "面试中"){
             sendEmail("您的状态变为 " + status);
